@@ -4,7 +4,7 @@ public enum Igralec {
 	O,
 	X;
 	
-	public Igralec Nasprotnik() {
+	public Igralec nasprotnik() {
 		if (this == O) {
 			return X;
 		} else {

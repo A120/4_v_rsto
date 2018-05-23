@@ -9,6 +9,7 @@ public class Logika {
 	public static final int A = 4; /* Dolžina vrste za zmago. */
 	
 	public Igralec naPotezi; /* Igralec je tisti, ki je na potezi. */
+	public Polje[][] plosca;
 	
 	 /**
 	  * Vsi možni èetvorci na plošèi.
@@ -33,12 +34,12 @@ public class Logika {
 				}
 			}
 		}
+	novaIgra();
 	}
 	
 	/**
 	 * Na zaèetku so vsa polja prazna, na potezi je O.
-	 */
-	
+	 */	
 	public void novaIgra() {
 		naPotezi = Igralec.O;
 		Polje [][] plosca = new Polje[M][N];
@@ -48,17 +49,36 @@ public class Logika {
 			}
 		}
 	}
+	
+	/**
+	 * Vrne true, èe je v stolpcu še prosto mesto, in odigra potezo p;
+	 * vrne false sicer.
+	 */
+	public boolean odigrajPotezo(Poteza p) {		
+		int x = p.vrniX();
+		int y = p.vrniY();
+		if (plosca[x][y] == Polje.PRAZNO) {
+			switch (naPotezi) {
+				case O: plosca[x][y] = Polje.O;
+				case X: plosca[x][y] = Polje.X;
+				default: System.out.println("Nihèe ni na potezi");
+			naPotezi = naPotezi.nasprotnik();
+			return true;
+			}
+		} else {
+			return false;
+		}
+	}
+	
 	/**
 	 * Ali je èetvorec zmagovalen, oz. ali so vsa polja èetvorca enaka p?
 	 */
 	
-	public boolean zmagovalni_cetvorec(Cetvorec z, Polje p) {
+	public boolean zmagovalniCetvorec(Cetvorec z, Polje p) {
 		for (int i = 0; i < A; i++) {
-			if (plosca[z.x[i]][z.y[i]] != p) {
-				return false;
-			}
-		return true;
+			if (plosca[z.x[i]][z.y[i]] != p) {return false;}
 		}
+		return true;
 	}
 	
 	/**
@@ -66,16 +86,14 @@ public class Logika {
 	 * katerega vsa polja so O ali X.
 	 */
 	
-	public stanjeIgre() {
+	public Stanje stanjeIgre() {
 		for (Cetvorec z : cetvorci) {
-			if (zmagovalni_cetvorec(z, Polje.O)) {
-				Stanje stanje = Stanje.ZMAGA_O;
-				return stanje;
+			if (zmagovalniCetvorec(z, Polje.O)) {
+				return Stanje.ZMAGA_O;
 			}
-			else if (zmagovalni_cetvorec(z, Polje.X)) {
-				Stanje stanje = Stanje.ZMAGA_X;
-				return stanje;
-			}
+			else if (zmagovalniCetvorec(z, Polje.X)) {
+				return Stanje.ZMAGA_X;
+			} else {continue;}
 		}
 		/* Ker je pri tej igri mogoè tudi remi, je treba preveriti, èe je kakšno polje še nezasedeno. */
 		for (int i = 0; i < M; i++) {
@@ -88,9 +106,9 @@ public class Logika {
 					}
 				}
 			}
-			/* Zmagovalca ni, vsa polja pa so neprazna. */
-			return Stanje.NEODLOCENO;
 		}
+		/* Zmagovalca ni, vsa polja pa so neprazna. */
+		return Stanje.NEODLOCENO;
 	}
 	
 }

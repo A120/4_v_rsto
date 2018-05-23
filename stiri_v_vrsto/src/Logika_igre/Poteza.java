@@ -9,7 +9,11 @@ public class Poteza {
 		this.y = y;
 	}
 	
-	public int Koordinati() {
-		return {x, y};
+	public int vrniX() {
+		return x;
+	}
+	
+	public int vrniY() {
+		return y;
 	}
 }
