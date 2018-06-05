@@ -16,8 +16,7 @@ import logika_igre.logika;
 import logika_igre.Polje;
 import logika_igre.cetvorcek;
 
-
-public class Polje extends JPanel implements MouseListener {
+public class Igralno_Polje {
 	
 	private Okno master;
 	
@@ -25,7 +24,7 @@ public class Polje extends JPanel implements MouseListener {
 	
 	private final static double PADDING = 0.1; //prostor okoli simbolovv O in X
 	
-	public Polje(Okno master) {
+	public Igralno_Polje(Okno master) {
 		super();
 		setBackground(Color.white);
 		this.master = master;
@@ -81,4 +80,29 @@ public class Polje extends JPanel implements MouseListener {
 				g2.fillRect((int)(w * i), (int)(w * j), (int)w, (int)w);
 			}
 		}
+	}
+		
+		//manjkajo se crte
+		
+		
+		// manjkajo se crte
+		
+		// križci in krožci - ne delajo se
+		Polje[][] plosca = master.getPlosca();
+		for (int j =0 , j<(Logika.M -1), j++) {
+			if (Polje[][j] == null) {
+				
+				switch(plosca[][j]) {
+				case X: Narisi_X(g2, i, j); break;
+				case O: Narisi_O(g2, i, j); break;
+				}
+				
+			}
+
+
+		}
+		break;
 }
+}
+	
+
