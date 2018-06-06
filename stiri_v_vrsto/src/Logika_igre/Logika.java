@@ -8,7 +8,7 @@ public class Logika {
 	public static final int N = 7; /* Širina igralne plošèe. */
 	public static final int A = 4; /* Dolžina vrste za zmago. */
 	
-	public Igralec naPotezi; /* Igralec je tisti, ki je na potezi. */
+	public Igralec naPotezi; /* Tisti igralec, ki je na potezi. */
 	public Polje[][] plosca;
 	
 	 /**
@@ -34,13 +34,12 @@ public class Logika {
 				}
 			}
 		}
-	novaIgra();
 	}
 	
 	/**
 	 * Na zaèetku so vsa polja prazna, na potezi je O.
 	 */	
-	public void novaIgra() {
+	public Logika() {
 		naPotezi = Igralec.O;
 		Polje [][] plosca = new Polje[M][N];
 		for (int i = 0; i < M; i++) {
@@ -48,6 +47,26 @@ public class Logika {
 				plosca[i][j] = Polje.PRAZNO;
 			}
 		}
+	}
+
+	/**
+	 * Vrne kopijo igre.
+	 */
+	public Logika(Logika igra) {
+		plosca = new Polje[M][N];
+		naPotezi = igra.naPotezi;
+		for (int i = 0; i < M; i++) {
+			for (int j = 0; j < N; j++) {
+				plosca[i][j] = igra.plosca[i][j];
+			}
+		}
+	}
+	
+	/**
+	 * Vrne plošèo.
+	 */
+	public Polje[][] vrniPlosco() {
+		return plosca;
 	}
 	
 	/**
@@ -74,11 +93,39 @@ public class Logika {
 	 * Ali je èetvorec zmagovalen, oz. ali so vsa polja èetvorca enaka p?
 	 */
 	
-	public boolean zmagovalniCetvorec(Cetvorec z, Polje p) {
-		for (int i = 0; i < A; i++) {
-			if (plosca[z.x[i]][z.y[i]] != p) {return false;}
+	public Cetvorec zmagovalniCetvorec() {
+		for (Cetvorec z : cetvorci) {
+			Igralec mozni_zmagovalec = kdoZmaga(z);
+			if (mozni_zmagovalec != null) {
+				return z;
+			} else {
+				continue;
+			}
 		}
-		return true;
+		return null;
+	}
+	
+	/**
+	 * Vrne igralca, ki je zmagal, ali null, èe èetvorec ni zmagovalni.
+	 */
+	
+	public Igralec kdoZmaga(Cetvorec z) {
+		int stevec_O = 0;
+		int stevec_X = 0;
+		for (int i = 0; i < A && (stevec_O == 0 || stevec_X == 0); i++) {
+			switch (plosca[z.x[i]][z.y[i]]) {
+			case O: stevec_O += 1; break;
+			case X: stevec_X += 1; break;
+			case PRAZNO: break;
+			}
+		}
+		if (stevec_O == A) {
+			return Igralec.O;
+		} else if (stevec_X == A) {
+			return Igralec.X;
+		} else {
+			return null;
+		}
 	}
 	
 	/**
@@ -87,13 +134,12 @@ public class Logika {
 	 */
 	
 	public Stanje stanjeIgre() {
-		for (Cetvorec z : cetvorci) {
-			if (zmagovalniCetvorec(z, Polje.O)) {
-				return Stanje.ZMAGA_O;
+		Cetvorec z = zmagovalniCetvorec();
+		if (z != null) {
+			switch (kdoZmaga(z)) {
+			case O: return Stanje.ZMAGA_O;
+			case X: return Stanje.ZMAGA_X;
 			}
-			else if (zmagovalniCetvorec(z, Polje.X)) {
-				return Stanje.ZMAGA_X;
-			} else {continue;}
 		}
 		/* Ker je pri tej igri mogoè tudi remi, je treba preveriti, èe je kakšno polje še nezasedeno. */
 		for (int i = 0; i < M; i++) {
@@ -110,5 +156,4 @@ public class Logika {
 		/* Zmagovalca ni, vsa polja pa so neprazna. */
 		return Stanje.NEODLOCENO;
 	}
-	
 }

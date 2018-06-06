@@ -1,13 +1,22 @@
 package GUI;
 
-import javax.swing.*;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 
-import java.awt.*;
-import java.awt.event.*;
+import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import Logika_igre.*;
 
 public class Okno extends JFrame implements ActionListener {
+	/* Igralno polje. */
+	private Igralno_Polje polje;
 	
 	/**
 	 * Statusna vrstica.
@@ -19,24 +28,48 @@ public class Okno extends JFrame implements ActionListener {
 	 */
 	private Logika igra;
 	
-	private Mislec MislecO; /* VleËe poteze O */
-	private Mislec MislecX; /* VleËe poteze X */
+	private Mislec MislecO; /* Vleƒçe poteze O */
+	private Mislec MislecX; /* Vleƒçe poteze X */
 	
+	private JMenuItem ClovekRacunalnik;
 	private JMenuItem RacunalnikClovek;
 	private JMenuItem RacunalnikRacunalnik;
 	private JMenuItem ClovekClovek;
 	
 	/**
-	 * Glavno okno, ki se ustvari na zaËetku. Tudi poûene igro.
+	 * Glavno okno, ki se ustvari na zaÔøΩetku. Tudi poÔøΩene igro.
 	 */
 	public Okno() {
-		this.setTitle("ätiri v vrsto");
+		this.setTitle("≈†tiri v vrsto");
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 		this.setLayout(new GridBagLayout());
 		
+		/* Menu. */
+		JMenuBar menu_bar = new JMenuBar();
+		this.setJMenuBar(menu_bar);
+		JMenu menu_igra = new JMenu("Igra");
+		menu_bar.add(menu_igra);
+		
+		/* Vsi ≈°tirje mo≈æni tipi igre, ki so na voljo v meniju */
+		final JMenuItem ClovekRacunalnik = new JMenuItem("ƒålovek <> Raƒçunalnik");
+		menu_igra.add(ClovekRacunalnik);
+		ClovekRacunalnik.addActionListener(this);
+		
+		final JMenuItem RacunalnikClovek = new JMenuItem("Raƒçunalnik <> ƒålovek");
+		menu_igra.add(RacunalnikClovek);
+		RacunalnikClovek.addActionListener(this);
+		
+		final JMenuItem ClovekClovek = new JMenuItem("ƒålovek <> ƒålovek");
+		menu_igra.add(ClovekClovek);
+		ClovekClovek.addActionListener(this);
+		
+		final JMenuItem RacunalnikRacunalnik = new JMenuItem("Raƒçunalnik <> Raƒçunalnik");
+		menu_igra.add(RacunalnikRacunalnik);
+		RacunalnikRacunalnik.addActionListener(this);
+		
 		/* Polje. */
-		Polje polje = new Polje(this);
-		GridBadConstraints postavitev_polja = new GridBadConstraints();
+		polje = new Igralno_Polje(this);
+		GridBagConstraints postavitev_polja = new GridBagConstraints();
 		postavitev_polja.gridx = 0;
 		postavitev_polja.gridy = 0;
 		postavitev_polja.weightx = 1;
@@ -45,34 +78,22 @@ public class Okno extends JFrame implements ActionListener {
 		
 		getContentPane().add(polje, postavitev_polja);
 		
-		/* Menu. */
-		JMenuBar menu_bar = new JMenuBar();
-		this.setJMenuBar(menu_bar);
-		JMenu menu_igra = new JMenu("Igra");
-		menu_bar.add(menu_igra);
+		/* Statusna vrstica. */
+		vrstica = new JLabel();
+		vrstica.setFont(new Font(vrstica.getFont().getName(),
+							    vrstica.getFont().getStyle(),
+							    25));
+		GridBagConstraints postavitev_vrstice = new GridBagConstraints();
+		postavitev_vrstice.gridx = 0;
+		postavitev_vrstice.gridy = 1;
+		postavitev_vrstice.anchor = GridBagConstraints.CENTER;
+		getContentPane().add(vrstica, postavitev_vrstice);
 		
-		/* Vsi ötirje moûni tipi igre, ki so na voljo v meniju */
-		final JMenuItem ClovekRacunalnik = new JMenuItem("»lovek <> RaËunalnik");
-		menu_igra.add(ClovekRacunalnik);
-		ClovekRacunalnik.addActionListener(this);
-		
-		final JMenuItem RacunalnikClovek = new JMenuItem("RaËunalnik <> »lovek");
-		menu_igra.add(RacunalnikClovek);
-		RacunalnikClovek.addActionListener(this);
-		
-		final JMenuItem ClovekClovek = new JMenuItem("»lovek <> »lovek");
-		menu_igra.add(ClovekClovek);
-		ClovekClovek.addActionListener(this);
-		
-		final JMenuItem RacunalnikRacunalnik = new JMenuItem("RaËunalnik <> RaËunalnik");
-		menu_igra.add(RacunalnikRacunalnik);
-		RacunalnikRacunalnik.addActionListener(this);
-		
-		/* Poûenemo igro. */
+		/* Po≈æenemo igro. */
 	}
 	
 	/**
-	 * Poûene novo igro.
+	 * Po≈æene novo igro.
 	 */
 	public void novaIgra(Mislec IgralecO, Mislec IgralecX) {
 		/* Prekinemo igralce. */
@@ -82,10 +103,82 @@ public class Okno extends JFrame implements ActionListener {
 		MislecO = IgralecO;
 		MislecX = IgralecX;
 		switch (igra.stanjeIgre()) {
-			case NA_POTEZI_O: MislecO.na_potezi(); break;
-			case NA_POTEZI_X: MislecX.na_potezi(); break;
-			default: break;
+		case NA_POTEZI_O: MislecO.na_potezi(); break;
+		case NA_POTEZI_X: MislecX.na_potezi(); break;
+		default: break;
 		}
-		}
-}
+	}
 	
+	/**
+	 * Naredi kopijo igre.
+	 */
+	public Logika kopirajIgro() {
+		return new Logika(igra);
+	}
+	
+	public void actionPerformed(ActionEvent event) {
+		if (event.getSource() == ClovekRacunalnik) {
+			novaIgra(new Clovek(this, Igralec.O),
+					  new Racunalnik(this, Igralec.X));
+		}
+		else if (event.getSource() == RacunalnikClovek) {
+			novaIgra(new Racunalnik(this, Igralec.O),
+					  new Clovek(this, Igralec.X));
+		}
+		else if (event.getSource() == RacunalnikRacunalnik) {
+			novaIgra(new Racunalnik(this, Igralec.O),
+					  new Racunalnik(this, Igralec.X));
+		}
+		else if (event.getSource() == ClovekClovek) {
+			novaIgra(new Clovek(this, Igralec.O),
+			          new Clovek(this, Igralec.X));
+		}
+	}
+	
+	/**
+	 * Se spro≈æi, ko uporabnik klikne na polje.
+	 * 
+	 * @param i
+	 * @param j
+	 */	
+	public void klikNaPolje(int i, int j) {
+		if (igra != null) {
+			switch (igra.stanjeIgre()) {
+			case NA_POTEZI_O: MislecO.klikni(i, j); break;
+			case NA_POTEZI_X: MislecX.klikni(i, j);break;
+			default: break;
+			}
+		}		
+	}
+	
+	/**
+	 * Odigra potezo.
+	 */
+	
+	public void odigraj(Poteza p) {
+		igra.odigrajPotezo(p);
+		switch (igra.stanjeIgre()) {
+		case NA_POTEZI_O: MislecO.na_potezi(); break;
+		case NA_POTEZI_X: MislecX.na_potezi(); break;
+		case ZMAGA_O: break;
+		case ZMAGA_X: break;
+		case NEODLOCENO: break;
+		default: break;
+		}
+	}
+	
+	public Cetvorec zmagovalniCetvorec() {
+		return igra.zmagovalniCetvorec();
+	}
+	
+	/**
+	 * Vrne trenutno plo≈°ƒço, ƒçe igra poteka, sicer null.
+	 */
+	public Polje[][] vrniPlosco() {
+		if (igra != null) {
+			return igra.vrniPlosco();
+		} else {
+			return null;
+		}
+	}
+}

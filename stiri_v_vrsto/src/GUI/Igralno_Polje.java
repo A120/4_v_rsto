@@ -1,7 +1,5 @@
 package GUI;
 
-import java.awt.*;
-import javax.swing.*;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -12,15 +10,14 @@ import java.awt.event.MouseListener;
 
 import javax.swing.JPanel;
 
-import logika_igre.logika;
-import logika_igre.Polje;
-import logika_igre.cetvorcek;
+import Logika_igre.*;
+
 
 public class Igralno_Polje extends JPanel implements MouseListener {
 	
 	private Okno master;
 	
-	private final static double LINE_WIDTH = 0.1; 	//relativna ≈°irina ƒçrte
+	private final static double LINE_WIDTH = 0.1; 	//relativna öirina Ërte
 	
 	private final static double PADDING = 0.1; //prostor okoli simbolovv O in X
 	
@@ -40,9 +37,15 @@ public class Igralno_Polje extends JPanel implements MouseListener {
 		return Math.min(getWidth(), getHeight()) / Math.max(Logika.M, Logika.N);
 	}
 	
-	private void Narisi_X(Graphics2D g2, int i, int j) {
+	/**
+	 * Nariöe X v polje (i, j).
+	 * @param g2
+	 * @param i
+	 * @param j
+	 */
+	private void narisiX(Graphics2D g2, int i, int j) {
 		double w = squareWidth();
-		double r = w * (1.0 - LINE_WIDTH - 2.0 * PADDING); // sirina X
+		double r = w * (1.0 - LINE_WIDTH - 2.0 * PADDING); // äirina X
 		double x = w * (i + 0.5 * LINE_WIDTH + PADDING);
 		double y = w * (j + 0.5 * LINE_WIDTH + PADDING);
 		g2.setColor(Color.blue);
@@ -51,11 +54,15 @@ public class Igralno_Polje extends JPanel implements MouseListener {
 		g2.drawLine((int)(x + r), (int)y, (int)x, (int)(y + r));
 	}
 	
-	
-	
-	private void Narisi_O(Graphics2D g2, int i, int j) {
+	/**
+	 * Nariöe O v polje (i, j).	
+	 * @param g2
+	 * @param i
+	 * @param j
+	 */
+	private void narisiO(Graphics2D g2, int i, int j) {
 		double w = squareWidth();
-		double r = w * (1.0 - LINE_WIDTH - 2.0 * PADDING); // premer O
+		double r = w * (1.0 - LINE_WIDTH - 2.0 * PADDING); // Premer O
 		double x = w * (i + 0.5 * LINE_WIDTH + PADDING);
 		double y = w * (j + 0.5 * LINE_WIDTH + PADDING);
 		g2.setColor(Color.red);
@@ -64,45 +71,72 @@ public class Igralno_Polje extends JPanel implements MouseListener {
 	}
 	
 	
-	protected void narisi_komponento(Graphics g) {
-		super.narisi_komponento(g);
+	protected void narisiKomponento(Graphics g) {
+		super.narisiKomponento(g);
 		Graphics2D g2 = (Graphics2D)g;
 
 		double w = squareWidth();
 
-		// ƒçe imamo zmagovalni cetvorcek, njeno ozadje pobarvamo
-		cetvorec t= master.zmagovalniCetvorec();
-		if (t != null) {
+		// »e imamo zmagovalni Ëetvorec, njegovo ozadje pobarvamo.
+		Cetvorec z = master.zmagovalniCetvorec();
+		if (z != null) {
 			g2.setColor(new Color(255, 255, 196));
-			for (int k = 0; k < Logika.N; k++) {
-				int i = t.x[k];
-				int j = t.y[k];
+			for (int k = 0; k < Logika.A; k++) {
+				int i = z.x[k];
+				int j = z.y[k];
 				g2.fillRect((int)(w * i), (int)(w * j), (int)w, (int)w);
 			}
 		}
-	}
 		
 		//manjkajo se crte
 		
 		
-		// manjkajo se crte
-		
-		// kri≈æci in kro≈æci - ne delajo se
-		Polje[][] plosca = master.getPlosca();
-		for (int j =0 , j<(Logika.M -1), j++) {
-			if (Polje[][j] == null) {
-				
-				switch(plosca[][j]) {
-				case X: Narisi_X(g2, i, j); break;
-				case O: Narisi_O(g2, i, j); break;
+		// Riöemo kriûce in kroûce
+		Polje[][] plosca = master.vrniPlosco();
+		if (plosca != null) {
+			for (int i = 0; i < Logika.M; i++) {
+				for (int j = 0; j < Logika.N; j++) {
+					switch(plosca[i][j]) {
+					case O: narisiO(g2, i, j); break;
+					case X: narisiX(g2, i, j); break;
+					default: break;
+					}
 				}
-				
 			}
-
-
+		}	
+	}
+	
+	public void mouseClicked(MouseEvent event) {
+		int x = event.getX();
+		int y = event.getY();
+		int w = (int)(squareWidth());
+		int j = x / w ;
+		double dj = (x % w) / squareWidth();
+		int i = y / w ;
+		double di = (y % w) / squareWidth();
+		if (0 <= i && i < Logika.M &&
+		    0.5 * LINE_WIDTH < di && di < 1.0 - 0.5 * LINE_WIDTH &&
+		    0 <= j && j < Logika.N && 
+		    0.5 * LINE_WIDTH < dj && dj < 1.0 - 0.5 * LINE_WIDTH) {
+			master.klikNaPolje(i, j);
 		}
-		break;
-}
+	}
+	
+	public void mousePressed(MouseEvent e) {
+		//Ignoriramo
+	}
+
+	public void mouseReleased(MouseEvent e) {
+		//Ignoriramo
+	}
+
+	public void mouseEntered(MouseEvent e) {
+		//Ignoriramo
+	}
+
+	public void mouseExited(MouseEvent e) {
+		//Ignoriramo
+	}
 }
 	
 
