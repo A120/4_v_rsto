@@ -4,19 +4,19 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class Logika {
-	public static final int M = 6; /* Višina igralne plošèe. */
-	public static final int N = 7; /* Širina igralne plošèe. */
-	public static final int A = 4; /* Dolina vrste za zmago. */
+	public static final int M = 6; /* Viï¿½ina igralne ploï¿½ï¿½e. */
+	public static final int N = 7; /* ï¿½irina igralne ploï¿½ï¿½e. */
+	public static final int A = 4; /* Dolï¿½ina vrste za zmago. */
 	
 	public Igralec naPotezi; /* Tisti igralec, ki je na potezi. */
 	public Polje[][] plosca;
 	
 	 /**
-	  * Vsi moni èetvorci na plošèi.
+	  * Vsi moÅ¾ni Äetvorci na ploÅ¡Äi.
 	  */
-	private static final List<Cetvorec> cetvorci = new LinkedList<Cetvorec>();
+	public static final List<Cetvorec> cetvorci = new LinkedList<Cetvorec>();
 	
-	{ /* Se izvede, ko se poene program */
+	{ /* Se izvede, ko se poÅ¾ene program */
 		for (int i = 0; i < M; i++) {
 			for (int j = 0; j < N; j++) {
 				for (int [] smer : new int [][] {{1, 0}, {0, 1}, {1, 1}}) {
@@ -37,7 +37,7 @@ public class Logika {
 	}
 	
 	/**
-	 * Na zaèetku so vsa polja prazna, na potezi je O.
+	 * Na zaÄetku so vsa polja prazna, na potezi je O.
 	 */	
 	public Logika() {
 		naPotezi = Igralec.O;
@@ -63,14 +63,29 @@ public class Logika {
 	}
 	
 	/**
-	 * Vrne plošèo.
+	 * Vrne ploÅ¡Äo.
 	 */
 	public Polje[][] vrniPlosco() {
 		return plosca;
 	}
 	
 	/**
-	 * Vrne true, èe je v stolpcu še prosto mesto, in odigra potezo p;
+	 * Vrne seznam moÅ¾nih potez.
+	 */
+	public List<Poteza> moznePoteze() {
+		LinkedList<Poteza> p = new LinkedList<Poteza>();
+		for (int i = 0; i < M; i++) {
+			for (int j = 0; j < N; j++) {
+				if (plosca[i][j] == Polje.PRAZNO) {
+					p.add(new Poteza(i, j));
+				}
+			}
+		}
+		return p;
+	}
+	
+	/**
+	 * Vrne true, Äe je v stolpcu Å¡e prosto mesto, in odigra potezo p;
 	 * vrne false sicer.
 	 */
 	public boolean odigrajPotezo(Poteza p) {		
@@ -80,7 +95,7 @@ public class Logika {
 			switch (naPotezi) {
 				case O: plosca[x][y] = Polje.O;
 				case X: plosca[x][y] = Polje.X;
-				default: System.out.println("Nihèe ni na potezi");
+				default: System.out.println("Nihï¿½e ni na potezi");
 			naPotezi = naPotezi.nasprotnik();
 			return true;
 			}
@@ -90,7 +105,7 @@ public class Logika {
 	}
 	
 	/**
-	 * Ali je èetvorec zmagovalen, oz. ali so vsa polja èetvorca enaka p?
+	 * Ali je Äetvorec zmagovalen, oz. ali so vsa polja Äetvorca enaka p?
 	 */
 	
 	public Cetvorec zmagovalniCetvorec() {
@@ -106,7 +121,7 @@ public class Logika {
 	}
 	
 	/**
-	 * Vrne igralca, ki je zmagal, ali null, èe èetvorec ni zmagovalni.
+	 * Vrne igralca, ki je zmagal, ali null, Äe Äetvorec ni zmagovalni.
 	 */
 	
 	public Igralec kdoZmaga(Cetvorec z) {
@@ -129,7 +144,7 @@ public class Logika {
 	}
 	
 	/**
-	 * Ali je igre konec? Konec je, ko na plošèi obstaja èetvorec,
+	 * Ali je igre konec? Konec je, ko na ploÅ¡Äi obstaja Äetvorec,
 	 * katerega vsa polja so O ali X.
 	 */
 	
@@ -141,7 +156,7 @@ public class Logika {
 			case X: return Stanje.ZMAGA_X;
 			}
 		}
-		/* Ker je pri tej igri mogoè tudi remi, je treba preveriti, èe je kakšno polje še nezasedeno. */
+		/* Ker je pri tej igri mogoÄ tudi remi, je treba preveriti, Äe je kakÅ¡no polje Å¡e nezasedeno. */
 		for (int i = 0; i < M; i++) {
 			for (int j = 0; j < N; j++) {
 				if (plosca [i][j] == Polje.PRAZNO) {
