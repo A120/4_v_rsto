@@ -7,10 +7,10 @@ public enum Polje {
 	
 	public String stringPolja() {
 		switch (this) {
-		default: return "...";
 		case PRAZNO: return " ";
 		case O: return "O";
 		case X: return "X";
+		default: return "...";
 		}
 	}
 }

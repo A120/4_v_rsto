@@ -12,7 +12,7 @@ import javax.swing.JPanel;
 
 import Logika_igre.*;
 
-
+@SuppressWarnings("serial")
 public class Igralno_Polje extends JPanel implements MouseListener {
 	
 	private Okno master;
@@ -30,7 +30,7 @@ public class Igralno_Polje extends JPanel implements MouseListener {
 	
 	
 	public Dimension getPreferredSize() {
-		return new Dimension(600, 700);
+		return new Dimension(700, 700);
 	}
 	
 	private double squareWidth() {
@@ -45,7 +45,7 @@ public class Igralno_Polje extends JPanel implements MouseListener {
 	 */
 	private void narisiX(Graphics2D g2, int i, int j) {
 		double w = squareWidth();
-		double r = w * (1.0 - LINE_WIDTH - 2.0 * PADDING); // �irina X
+		double r = w * (1.0 - LINE_WIDTH - 2.0 * PADDING); // Širina X
 		double x = w * (i + 0.5 * LINE_WIDTH + PADDING);
 		double y = w * (j + 0.5 * LINE_WIDTH + PADDING);
 		g2.setColor(Color.blue);
@@ -89,7 +89,7 @@ public class Igralno_Polje extends JPanel implements MouseListener {
 		}
 		
 		// Narišemo črte.
-
+		g2.setColor(Color.black);
 		g2.setStroke(new BasicStroke((float) (w * LINE_WIDTH)));
 		for (int i = 0; i < (Logika.N + 1); i++) {
 		    g.drawLine((int)(i * w),
@@ -98,10 +98,10 @@ public class Igralno_Polje extends JPanel implements MouseListener {
 		    (int)(Logika.M * w));          
 		}
 		
-		// N = 7, M = 6, w = sirina okenca
+		// N = 7, M = 6, w je širina okenca
 		for (int j = 0; j < (Logika.M + 1); j++) {
 		    g.drawLine((int)(0),
-		    (int)(j*w),
+		    (int)(j * w),
 		    (int)(Logika.N * w),
 		    (int)(j * w));	          
 		}

@@ -14,8 +14,11 @@ import java.awt.event.ActionListener;
 
 import Logika_igre.*;
 
+@SuppressWarnings("serial")
 public class Okno extends JFrame implements ActionListener {
-	/* Igralno polje. */
+	/**
+	 *  Igralno polje. 
+	 **/
 	private Igralno_Polje polje;
 	
 	/**
@@ -37,7 +40,7 @@ public class Okno extends JFrame implements ActionListener {
 	private JMenuItem ClovekClovek;
 	
 	/**
-	 * Glavno okno, ki se ustvari na za�etku. Tudi po�ene igro.
+	 * Glavno okno, ki se ustvari na začetku. Tudi požene igro.
 	 */
 	public Okno() {
 		this.setTitle("Štiri v vrsto");
@@ -51,19 +54,19 @@ public class Okno extends JFrame implements ActionListener {
 		menu_bar.add(menu_igra);
 		
 		/* Vsi štirje možni tipi igre, ki so na voljo v meniju */
-		final JMenuItem ClovekRacunalnik = new JMenuItem("Človek <> Računalnik");
+		ClovekRacunalnik = new JMenuItem("Človek <> Računalnik");
 		menu_igra.add(ClovekRacunalnik);
 		ClovekRacunalnik.addActionListener(this);
 		
-		final JMenuItem RacunalnikClovek = new JMenuItem("Računalnik <> Človek");
+		RacunalnikClovek = new JMenuItem("Računalnik <> Človek");
 		menu_igra.add(RacunalnikClovek);
 		RacunalnikClovek.addActionListener(this);
 		
-		final JMenuItem ClovekClovek = new JMenuItem("Človek <> Človek");
+		ClovekClovek = new JMenuItem("Človek <> Človek");
 		menu_igra.add(ClovekClovek);
 		ClovekClovek.addActionListener(this);
 		
-		final JMenuItem RacunalnikRacunalnik = new JMenuItem("Računalnik <> Računalnik");
+		RacunalnikRacunalnik = new JMenuItem("Računalnik <> Računalnik");
 		menu_igra.add(RacunalnikRacunalnik);
 		RacunalnikRacunalnik.addActionListener(this);
 		
@@ -72,6 +75,7 @@ public class Okno extends JFrame implements ActionListener {
 		GridBagConstraints postavitev_polja = new GridBagConstraints();
 		postavitev_polja.gridx = 0;
 		postavitev_polja.gridy = 0;
+		postavitev_polja.fill = GridBagConstraints.BOTH;
 		postavitev_polja.weightx = 1;
 		postavitev_polja.weighty = 1;
 		postavitev_polja.fill = GridBagConstraints.CENTER;
@@ -90,6 +94,7 @@ public class Okno extends JFrame implements ActionListener {
 		getContentPane().add(vrstica, postavitev_vrstice);
 		
 		/* Poženemo igro. */
+		novaIgra(new Clovek(this, Igralec.O), new Racunalnik(this, Igralec.X));
 	}
 	
 	/**
@@ -107,6 +112,7 @@ public class Okno extends JFrame implements ActionListener {
 		case NA_POTEZI_X: MislecX.na_potezi(); break;
 		default: break;
 		}
+		osveziGUI();
 	}
 	
 	/**
@@ -157,18 +163,36 @@ public class Okno extends JFrame implements ActionListener {
 	
 	public void odigraj(Poteza p) {
 		igra.odigrajPotezo(p);
+		osveziGUI();
 		switch (igra.stanjeIgre()) {
 		case NA_POTEZI_O: MislecO.na_potezi(); break;
 		case NA_POTEZI_X: MislecX.na_potezi(); break;
 		case ZMAGA_O: break;
 		case ZMAGA_X: break;
 		case NEODLOCENO: break;
-		default: break;
 		}
 	}
 	
 	public Cetvorec zmagovalniCetvorec() {
 		return igra.zmagovalniCetvorec();
+	}
+	
+	/**
+	 * Osveži GUI, popravi statusno vrstico.
+	 */
+	public void osveziGUI() {
+		if (igra != null) {
+			switch (igra.stanjeIgre()) {
+			case NA_POTEZI_O: vrstica.setText("Na potezi je O"); break;
+			case NA_POTEZI_X: vrstica.setText("Na potezi je X"); break;
+			case NEODLOCENO: vrstica.setText("Neodločeno"); break;
+			case ZMAGA_O: vrstica.setText("Zmagal je O"); break;
+			case ZMAGA_X: vrstica.setText("Zmagal je X"); break;
+			}
+		} else {
+			vrstica.setText("Igra ne poteka");
+		}
+		polje.repaint();
 	}
 	
 	/**

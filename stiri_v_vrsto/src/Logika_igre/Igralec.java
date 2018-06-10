@@ -11,4 +11,9 @@ public enum Igralec {
 			return O;
 		}
 	}
+	
+	public Polje vrniPolje() {
+		if (this == O) { return Polje.O; }
+		else { return Polje.X; }
+	}
 }

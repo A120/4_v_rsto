@@ -4,9 +4,9 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class Logika {
-	public static final int M = 6; /* Vi�ina igralne plo��e. */
-	public static final int N = 7; /* �irina igralne plo��e. */
-	public static final int A = 4; /* Dol�ina vrste za zmago. */
+	public static final int M = 6; /* Višina igralne plošče. */
+	public static final int N = 7; /* Širina igralne plošče. */
+	public static final int A = 4; /* Dolžina vrste za zmago. */
 	
 	public Igralec naPotezi; /* Tisti igralec, ki je na potezi. */
 	public Polje[][] plosca;
@@ -16,10 +16,13 @@ public class Logika {
 	  */
 	public static final List<Cetvorec> cetvorci = new LinkedList<Cetvorec>();
 	
-	{ /* Se izvede, ko se požene program */
+	/**
+	 * Se izvede, ko se požene program.
+	 **/
+	static {
 		for (int i = 0; i < M; i++) {
 			for (int j = 0; j < N; j++) {
-				for (int [] smer : new int [][] {{1, 0}, {0, 1}, {1, 1}}) {
+				for (int [] smer : new int[][] {{1, 0}, {0, 1}, {1, 1}}) {
 					int smer_i = smer[0];
 					int smer_j = smer[1];
 					if ((i + (A - 1) * smer_i < M) && (j + (A - 1) * smer_j < N)) {
@@ -40,8 +43,8 @@ public class Logika {
 	 * Na začetku so vsa polja prazna, na potezi je O.
 	 */	
 	public Logika() {
+		plosca = new Polje[M][N];
 		naPotezi = Igralec.O;
-		Polje [][] plosca = new Polje[M][N];
 		for (int i = 0; i < M; i++) {
 			for (int j = 0; j < N; j++) {
 				plosca[i][j] = Polje.PRAZNO;
@@ -54,7 +57,7 @@ public class Logika {
 	 */
 	public Logika(Logika igra) {
 		plosca = new Polje[M][N];
-		naPotezi = igra.naPotezi;
+		this.naPotezi = igra.naPotezi;
 		for (int i = 0; i < M; i++) {
 			for (int j = 0; j < N; j++) {
 				plosca[i][j] = igra.plosca[i][j];
@@ -92,20 +95,16 @@ public class Logika {
 		int x = p.vrniX();
 		int y = p.vrniY();
 		if (plosca[x][y] == Polje.PRAZNO) {
-			switch (naPotezi) {
-				case O: plosca[x][y] = Polje.O;
-				case X: plosca[x][y] = Polje.X;
-				default: System.out.println("Nih�e ni na potezi");
+			plosca[x][y] = naPotezi.vrniPolje();
 			naPotezi = naPotezi.nasprotnik();
 			return true;
-			}
 		} else {
 			return false;
 		}
 	}
 	
 	/**
-	 * Ali je četvorec zmagovalen, oz. ali so vsa polja četvorca enaka p?
+	 * Vrne zmagovalni četvorec ali pa null, če le-tega ni.
 	 */
 	
 	public Cetvorec zmagovalniCetvorec() {
@@ -151,9 +150,10 @@ public class Logika {
 	public Stanje stanjeIgre() {
 		Cetvorec z = zmagovalniCetvorec();
 		if (z != null) {
-			switch (kdoZmaga(z)) {
+			switch (plosca[z.x[0]][z.y[0]]) {
 			case O: return Stanje.ZMAGA_O;
 			case X: return Stanje.ZMAGA_X;
+			case PRAZNO: assert false;
 			}
 		}
 		/* Ker je pri tej igri mogoč tudi remi, je treba preveriti, če je kakšno polje še nezasedeno. */
