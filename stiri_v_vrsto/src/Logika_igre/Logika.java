@@ -22,10 +22,13 @@ public class Logika {
 	static {
 		for (int i = 0; i < M; i++) {
 			for (int j = 0; j < N; j++) {
-				for (int [] smer : new int[][] {{1, 0}, {0, 1}, {1, 1}}) {
+				for (int [] smer : new int[][] {{1, 0}, {0, 1}, {1, 1}, {1, -1}}) {
 					int smer_i = smer[0];
 					int smer_j = smer[1];
-					if ((i + (A - 1) * smer_i < M) && (j + (A - 1) * smer_j < N)) {
+					if ((i + (A - 1) * smer_i < M)
+						&& (j + (A - 1) * smer_j < N)
+						&& (j + (A - 1) * smer_j >= 0)
+						) {
 						int [] x = new int [A];
 						int [] y = new int [A];
 						for (int k = 0; k < A; k++) {

@@ -4,7 +4,7 @@ import Logika_igre.*;
 
 /**
  * Objekt sestavljen iz Poteze in ocene le-te. Če je poteza null, je igre konec,
- * rezultat pa je spravljen v oceni.
+ * izid pa je spravljen v oceni.
  */
 
 public class OcenjenaPoteza {
@@ -12,6 +12,7 @@ public class OcenjenaPoteza {
 	public int ocena;
 	
 	public OcenjenaPoteza(Poteza poteza, int ocena) {
+		super();
 		this.poteza = poteza;
 		this.ocena = ocena;
 	}

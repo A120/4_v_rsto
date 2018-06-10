@@ -17,7 +17,7 @@ public class Minimax extends SwingWorker<Poteza, Object> {
 	}
 	
 	/**
-	 * Vrne ocenjeno potezo z najboljšo oceno glede na dano igro in globino n.
+	 * Vrne ocenjenaPoteza z najboljšo oceno glede na dano igro in globino n.
 	 */
 	
 	private OcenjenaPoteza algoritem(Logika igra, int n) {
@@ -57,6 +57,16 @@ public class Minimax extends SwingWorker<Poteza, Object> {
 				}
 			}
 			return new OcenjenaPoteza(najboljsaPoteza, najboljsaOcena);
+		}
+	}
+	
+	public void done() {
+		try {
+			Poteza p = this.get();
+			if (p != null) {
+				master.odigraj(p);
+			}
+		} catch (Exception e) {
 		}
 	}
 	

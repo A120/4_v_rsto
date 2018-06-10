@@ -11,7 +11,7 @@ public class Ocena {
 	public static int vrednostCetvorca(int i) {
 		assert (i < A);
 		if (i == 0) { return 0; }
-		return (1000 >> (A - i) );
+		return (ZMAGA >> ((A - i) * 10) );
 	}
 	
 	public static int oceni(Logika igra, Igralec jaz) {

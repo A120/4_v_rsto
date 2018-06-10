@@ -16,7 +16,7 @@ public class Racunalnik extends Mislec {
 	}
 	
 	public void na_potezi() {
-		thinker = new Minimax(master, jaz, 3);
+		thinker = new Minimax(master, jaz, 5);
 		thinker.execute();
 	}
 	
