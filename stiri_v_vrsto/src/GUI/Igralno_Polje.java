@@ -46,8 +46,8 @@ public class Igralno_Polje extends JPanel implements MouseListener {
 	private void narisiX(Graphics2D g2, int i, int j) {
 		double w = squareWidth();
 		double r = w * (1.0 - LINE_WIDTH - 2.0 * PADDING); // Širina X
-		double x = w * (i + 0.5 * LINE_WIDTH + PADDING);
-		double y = w * (j + 0.5 * LINE_WIDTH + PADDING);
+		double x = w * (j + 0.5 * LINE_WIDTH + PADDING);
+		double y = w * (i + 0.5 * LINE_WIDTH + PADDING);
 		g2.setColor(Color.blue);
 		g2.setStroke(new BasicStroke((float) (w * LINE_WIDTH)));
 		g2.drawLine((int)x, (int)y, (int)(x + r), (int)(y + r));
@@ -63,8 +63,8 @@ public class Igralno_Polje extends JPanel implements MouseListener {
 	private void narisiO(Graphics2D g2, int i, int j) {
 		double w = squareWidth();
 		double r = w * (1.0 - LINE_WIDTH - 2.0 * PADDING); // Premer O
-		double x = w * (i + 0.5 * LINE_WIDTH + PADDING);
-		double y = w * (j + 0.5 * LINE_WIDTH + PADDING);
+		double x = w * (j + 0.5 * LINE_WIDTH + PADDING);
+		double y = w * (i + 0.5 * LINE_WIDTH + PADDING);
 		g2.setColor(Color.red);
 		g2.setStroke(new BasicStroke((float) (w * LINE_WIDTH)));
 		g2.drawOval((int)x, (int)y, (int)r , (int)r);
@@ -82,8 +82,8 @@ public class Igralno_Polje extends JPanel implements MouseListener {
 		if (z != null) {
 			g2.setColor(new Color(255, 255, 196));
 			for (int k = 0; k < Logika.A; k++) {
-				int i = z.x[k];
-				int j = z.y[k];
+				int j = z.x[k];
+				int i = z.y[k];
 				g2.fillRect((int)(w * i), (int)(w * j), (int)w, (int)w);
 			}
 		}
