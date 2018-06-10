@@ -78,7 +78,7 @@ public class Logika {
 	public List<Poteza> moznePoteze() {
 		LinkedList<Poteza> p = new LinkedList<Poteza>();
 		for (int j = 0; j < N; j++) {
-			for (int i = M - 1; M > 0; i--) {
+			for (int i = M - 1; i > -1; i--) {
 				if (plosca[i][j] == Polje.PRAZNO) {
 					p.add(new Poteza(i, j));
 					break;
@@ -96,12 +96,10 @@ public class Logika {
 		int x = p.vrniX();
 		int y = p.vrniY();
 		for (Poteza q : moznePoteze()) {
-			if (q.vrniX() == p.vrniX() && q.vrniY() == p.vrniY()) {
+			if (q.vrniX() == x && q.vrniY() == y) {
 				plosca[x][y] = naPotezi.vrniPolje();
 				naPotezi = naPotezi.nasprotnik();
 				return true;
-			} else {
-				continue;
 			}
 		}
 		return false;
